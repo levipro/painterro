@@ -948,16 +948,17 @@ class PainterroProc {
           e.clientX = e.changedTouches[0].clientX;
           e.clientY = e.changedTouches[0].clientY;
           this.documentHandlers.mousedown(e);
-        } else if (e.touches.length === 2) {
-          const fingersDist = distance({
-            x: e.changedTouches[0].clientX,
-            y: e.changedTouches[0].clientY,
-          }, {
-            x: e.changedTouches[1].clientX,
-            y: e.changedTouches[1].clientY,
-          });
-          this.lastFingerDist = fingersDist;
-        }
+        } 
+        // else if (e.touches.length === 2) {
+        //   const fingersDist = distance({
+        //     x: e.changedTouches[0].clientX,
+        //     y: e.changedTouches[0].clientY,
+        //   }, {
+        //     x: e.changedTouches[1].clientX,
+        //     y: e.changedTouches[1].clientY,
+        //   });
+        //   this.lastFingerDist = fingersDist;
+        // }
       },
       touchend: (e) => {
         e.clientX = e.changedTouches[0].clientX;
@@ -969,24 +970,25 @@ class PainterroProc {
           e.clientX = e.changedTouches[0].clientX;
           e.clientY = e.changedTouches[0].clientY;
           this.documentHandlers.mousemove(e);
-        } else if (e.touches.length === 2) {
-          const fingersDist = distance({
-            x: e.changedTouches[0].clientX,
-            y: e.changedTouches[0].clientY,
-          }, {
-            x: e.changedTouches[1].clientX,
-            y: e.changedTouches[1].clientY,
-          });
+        } 
+        // else if (e.touches.length === 2) {
+        //   const fingersDist = distance({
+        //     x: e.changedTouches[0].clientX,
+        //     y: e.changedTouches[0].clientY,
+        //   }, {
+        //     x: e.changedTouches[1].clientX,
+        //     y: e.changedTouches[1].clientY,
+        //   });
 
-          if (fingersDist > this.lastFingerDist) {
-            this.documentHandlers.wheel(e, 1, true);
-          } else if (fingersDist < this.lastFingerDist) {
-            this.documentHandlers.wheel(e, 1, true);
-          }
-          this.lastFingerDist = fingersDist;
-          e.stopPropagation();
-          if (!this.zoomButtonActive) e.preventDefault();
-        }
+        //   if (fingersDist > this.lastFingerDist) {
+        //     this.documentHandlers.wheel(e, 1, true);
+        //   } else if (fingersDist < this.lastFingerDist) {
+        //     this.documentHandlers.wheel(e, 1, true);
+        //   }
+        //   this.lastFingerDist = fingersDist;
+        //   e.stopPropagation();
+        //   if (!this.zoomButtonActive) e.preventDefault();
+        // }
       },
       mousemove: (e) => {
         if (this.shown) {
@@ -1248,33 +1250,35 @@ class PainterroProc {
 
   adjustSizeFull() {
     const ratio = this.wrapper.documentClientWidth / this.wrapper.documentClientHeight;
-    if (this.zoom === false) {
-      if (this.size.w > this.wrapper.documentClientWidth ||
-        this.size.h > this.wrapper.documentClientHeight) {
-        const newRelation = ratio < this.size.ratio;
-        this.ratioRelation = newRelation;
-        if (newRelation) {
-          this.canvas.style.width = `${this.wrapper.clientWidth}px`;
-          this.canvas.style.height = 'auto';
+    if (this.size) {
+      if (this.zoom === false) {
+        if (this.size.w > this.wrapper.documentClientWidth ||
+          this.size.h > this.wrapper.documentClientHeight) {
+          const newRelation = ratio < this.size.ratio;
+          this.ratioRelation = newRelation;
+          if (newRelation) {
+            this.canvas.style.width = `${this.wrapper.clientWidth}px`;
+            this.canvas.style.height = 'auto';
+          } else {
+            this.canvas.style.width = 'auto';
+            this.canvas.style.height = `${this.wrapper.clientHeight}px`;
+          }
+          this.scroller.style.overflow = 'hidden';
         } else {
+          this.scroller.style.overflow = 'hidden';
           this.canvas.style.width = 'auto';
-          this.canvas.style.height = `${this.wrapper.clientHeight}px`;
+          this.canvas.style.height = 'auto';
+          this.ratioRelation = 0;
         }
-        this.scroller.style.overflow = 'hidden';
       } else {
-        this.scroller.style.overflow = 'hidden';
-        this.canvas.style.width = 'auto';
-        this.canvas.style.height = 'auto';
+        this.scroller.style.overflow = 'scroll';
+        this.canvas.style.width = `${this.size.w * this.zoomFactor}px`;
+        this.canvas.style.height = `${this.size.h * this.zoomFactor}px`;
         this.ratioRelation = 0;
       }
-    } else {
-      this.scroller.style.overflow = 'scroll';
-      this.canvas.style.width = `${this.size.w * this.zoomFactor}px`;
-      this.canvas.style.height = `${this.size.h * this.zoomFactor}px`;
-      this.ratioRelation = 0;
+      this.syncToolElement();
+      this.select.draw();
     }
-    this.syncToolElement();
-    this.select.draw();
   }
 
   resize(x, y) {
