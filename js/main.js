@@ -255,20 +255,20 @@ class PainterroProc {
           },
           getValue: () => this.textTool.isItalic,
         }),
-        () => ({
-          type: 'bool',
-          title: 'fontStrokeAndShadow',
-          titleFull: 'fontStrokeAndShadowFull',
-          target: 'fontStrokeAndShadow',
-          action: () => {
-            const btn = this.getElemByIdSafe(this.activeTool.controls[5].id);
-            const nextState = !(btn.getAttribute('data-value') === 'true');
-            this.textTool.setStrokeOn(nextState);
-            setParam('defaultTextStrokeAndShadow', nextState);
-            btn.setAttribute('data-value', nextState ? 'true' : 'false');
-          },
-          getValue: () => this.textTool.strokeOn,
-        }),
+        // () => ({
+        //   type: 'bool',
+        //   title: 'fontStrokeAndShadow',
+        //   titleFull: 'fontStrokeAndShadowFull',
+        //   target: 'fontStrokeAndShadow',
+        //   action: () => {
+        //     const btn = this.getElemByIdSafe(this.activeTool.controls[5].id);
+        //     const nextState = !(btn.getAttribute('data-value') === 'true');
+        //     this.textTool.setStrokeOn(nextState);
+        //     setParam('defaultTextStrokeAndShadow', nextState);
+        //     btn.setAttribute('data-value', nextState ? 'true' : 'false');
+        //   },
+        //   getValue: () => this.textTool.strokeOn,
+        // }),
       ],
       activate: () => {
         if (this.initText) this.wrapper.click();
